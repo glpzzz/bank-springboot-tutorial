@@ -4,7 +4,7 @@ import com.daxslab.springboot.tutorial01.datasource.BankDataSource
 import com.daxslab.springboot.tutorial01.model.Bank
 import org.springframework.stereotype.Repository
 
-@Repository
+@Repository("mock")
 class MockBankDataSource : BankDataSource {
 
     var banks = mutableListOf(
