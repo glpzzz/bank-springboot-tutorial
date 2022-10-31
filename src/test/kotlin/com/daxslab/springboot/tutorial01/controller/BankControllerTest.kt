@@ -199,7 +199,7 @@ internal class BankControllerTest @Autowired constructor(
                 // then
                 .andDo { print() }
                 .andExpect {
-                    status { isOk() }
+                    status { isNoContent() }
                     content {
                         contentType(MediaType.APPLICATION_JSON)
                         json(objectMapper.writeValueAsString(bank))
