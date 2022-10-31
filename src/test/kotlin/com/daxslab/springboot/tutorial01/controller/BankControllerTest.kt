@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.patch
-import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -188,4 +185,49 @@ internal class BankControllerTest @Autowired constructor(
         }
     }
 
+    @Nested
+    @DisplayName("DELETE /api/banks/{accountNumber}")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class Delete {
+        @Test
+        fun `should delete a bank`() {
+            // given
+            val bank = Bank("1234", 8.0, 14)
+
+            // when
+            mockMvc.delete("$BASE_URL/${bank.accountNumber}")
+                // then
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                    content {
+                        contentType(MediaType.APPLICATION_JSON)
+                        json(objectMapper.writeValueAsString(bank))
+                    }
+                }
+
+            mockMvc.get("$BASE_URL/${bank.accountNumber}")
+                .andExpect {
+                    status { isNotFound() }
+                    content {
+                        content { string("Can't find a bank with account number '${bank.accountNumber}'") }
+                    }
+                }
+        }
+
+        @Test
+        fun `should throw NOT FOUND when trying to delete unexisting bank`() {
+            // given
+            val bank = Bank("7890", 8.0, 14)
+
+            // when
+            mockMvc.delete("$BASE_URL/${bank.accountNumber}")
+                // then
+                .andDo { print() }
+                .andExpect {
+                    status { isNotFound() }
+                    content { string("Can't find a bank with account number '${bank.accountNumber}'") }
+                }
+        }
+    }
 }

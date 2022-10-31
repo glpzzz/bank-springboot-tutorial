@@ -31,4 +31,7 @@ class BankController(private val service: BankService) {
     @PatchMapping("/{accountNumber}")
     fun update(@PathVariable accountNumber: String, @RequestBody bank: Bank): Bank = service.update(accountNumber, bank)
 
+    @DeleteMapping("/{accountNumber}")
+    fun delete(@PathVariable accountNumber: String): Bank = service.delete(accountNumber)
+
 }
