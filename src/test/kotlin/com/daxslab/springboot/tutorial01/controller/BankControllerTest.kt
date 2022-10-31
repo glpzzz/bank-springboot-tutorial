@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.*
 
 @SpringBootTest
@@ -84,6 +85,7 @@ internal class BankControllerTest @Autowired constructor(
     @TestInstance(Lifecycle.PER_CLASS)
     inner class Create {
         @Test
+        @DirtiesContext
         fun `should create a new bank`() {
             // given
             val bank = Bank("4567", 4.0, 14)
@@ -137,6 +139,7 @@ internal class BankControllerTest @Autowired constructor(
     @TestInstance(Lifecycle.PER_CLASS)
     inner class Update {
         @Test
+        @DirtiesContext
         fun `should update a bank`() {
             // given
             val bank = Bank("1234", 8.0, 14)
@@ -190,9 +193,10 @@ internal class BankControllerTest @Autowired constructor(
     @TestInstance(Lifecycle.PER_CLASS)
     inner class Delete {
         @Test
+        @DirtiesContext
         fun `should delete a bank`() {
             // given
-            val bank = Bank("1234", 8.0, 14)
+            val bank = Bank("1234", 1.0, 11)
 
             // when
             mockMvc.delete("$BASE_URL/${bank.accountNumber}")
